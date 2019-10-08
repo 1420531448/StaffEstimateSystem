@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+{include file="common/banner"}
+<head>
+    <meta charset="UTF-8">
+    <title>统计结果列表</title>
+    <style type="text/css">
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 800px;
+        }
+        td{
+            border: 1px solid black;
+            height: 50px;
+        }
+        .station{
+            text-align: center;
+        }
+        .title{
+            width: 100px;
+            text-align: center;
+        }
+        button{
+            width: 200px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<a href="/index/index/index"><button>首页</button></a>
+<div style="text-align: center">统计结果列表</div>
+{volist name='result' key='key' id='re'}
+<table>
+
+    <tr>
+        <td class="title">岗位</td>
+        <td class="station">{$key}</td>
+    </tr>
+    {volist name='re' key='sort' id='r'}
+    <tr>
+        <td class="title">问题</td>
+        <td>{$sort}.{$key}</td>
+    </tr>
+
+    <tr>
+        <td class="title">人员</td>
+
+        <td>
+            {volist name='r' id='i'}
+            <span>{$i};</span>
+            {/volist}
+        </td>
+
+    </tr>
+    {/volist}
+
+</table>
+<br>
+{/volist}
+</body>
+</html>

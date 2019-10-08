@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工能力评估系统</title>
+    <style type="text/css">
+        .banner {
+            background-color: gray;
+        }
+
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
+        input[type="text"] {
+            border: none;
+            width: 100%;
+        }
+
+        input[type="number"] {
+            border: none;
+            width: 100%;
+        }
+
+        input[type="date"] {
+            border: none;
+            width: 100%;
+        }
+
+        .a2b5 {
+            color: red;
+        }
+
+        .needCenter > td {
+            text-align: center;
+        }
+
+        .station {
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body><!--<?='__STATIC__/image/logo.png'?>-->
+<div class="banner"><img src="/static/image/logo.png" alt=""/></div>
+<form action="editEstimateResult" method="post">
+    <div style="text-align: center">
+        钻井队<span id="station_id">{$result.station_name}</span>履职能力评估表
+        <input type="text" hidden name="result_id" value="{$result.result_id}">
+        <input type="text" hidden name="station_id" value="{$result.station_id}">
+    </div>
+    <table>
+        <tr class="needCenter">
+            <td class="a1" colspan="3">
+                被评估人单位
+            </td>
+            <td class="a2" colspan="3">
+                <input type="text" value="{$result.unit}" name="unit">
+            </td>
+            <td colspan="3">
+                评估日期
+            </td>
+            <td colspan="3">
+                <input type="date" value="{$result.estimate_date}" name="estimate_date">
+            </td>
+        </tr>
+        <tr class="needCenter">
+            <td>
+                被评估人
+            </td>
+            <td>
+                <input type="text" value="{$result.estimate_name}" name="estimate_name">
+            </td>
+            <td colspan="2">
+                岗位
+            </td>
+            <td id="station_detail">
+
+            </td>
+            <td colspan="8">
+                <label><input type="checkbox" name="type[]" value="1" <?=$result['type'][0]==1?"checked":''?>><span class="a2b5">新组队</span></label>
+                <label><input type="checkbox" name="type[]" value="2" <?=$result['type'][1]==2?"checked":''?>><span class="a2b5">新调入</span></label>
+                <label><input type="checkbox" name="type[]" value="4" <?=$result['type'][2]==4?"checked":''?>><span class="a2b5">新探区</span></label>
+                <label><input type="checkbox" name="type[]" value="8" <?=$result['type'][3]==8?"checked":''?>><span class="a2b5">重点井</span></label>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center" colspan="12">
+                工作经历评估项目
+            </td>
+        </tr>
+        <tr>
+            <td>
+                本岗位工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" value="{$result.station_working_years}" name="station_working_years">
+            </td>
+            <td>
+                本区块工作年限
+            </td>
+            <td colspan="2">
+                <input type="number"  value="{$result.section_working_years}" name="section_working_years">
+            </td>
+            <td>
+                本机型工作年限
+            </td>
+            <td colspan="2">
+                <input type="number"  value="{$result.type_of_mechine_years}"  name="type_of_mechine_years">
+            </td>
+            <td>
+                顶驱工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" value="{$result.top_drive_working_years}" name="top_drive_working_years">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" style="text-align: center">评估要求</td>
+        </tr>
+        <tr>
+            <td colspan="12">根据表格所列举问题，在空白处打钩。其中 <span id="number"></span>项为必填项</td>
+        </tr>
+        <tr class="start">
+            <td style="text-align: center" colspan="12">评估内容</td>
+        </tr>
+        <!--主题问题遍历-->
+        {volist name="problem_detail" key="k" id="p" empty="暂无数据"}
+        <tr>
+            <td colspan="6">{$k}.{$p.description}</td>
+            <td>是</td>
+            <td><input type="radio" name="problem_id<?=$p['problem_id']?>" value="1" <?=$p['value']==1 ? "checked" :''?>></td>
+            <td>部分</td>
+            <td><input type="radio" name="problem_id<?=$p['problem_id']?>" value="2" <?=$p['value']==2 ? "checked" : ''?>></td>
+            <td>否</td>
+            <td><input type="radio" name="problem_id<?=$p['problem_id']?>" value="3" <?=$p['value']==3 ? "checked" :''?>></td>
+        </tr>
+        {/volist}
+        <!--<tr>
+            <td>
+
+            </td>
+        </tr>-->
+        <!---->
+        <tr>
+            <td colspan="12">{$sort}.具备以下哪些钻机工作经验（可多选）</td>
+        </tr>
+        <tr class="needCenter">
+            <td colspan="2">电动</td>
+            <td ><input type="checkbox" name="drilling machine[]" value="电动" <?=in_array("电动",$drilling_machine)?"checked":''?>></td>
+            <td>机械</td>
+            <td><input type="checkbox" name="drilling machine[]" value="机械" <?=in_array("机械",$drilling_machine)?"checked":''?>></td>
+            <td>ZPD</td>
+            <td><input type="checkbox" name="drilling machine[]" value="ZPD" <?=in_array("ZPD",$drilling_machine)?"checked":''?>></td>
+            <td>LDB</td>
+            <td><input type="checkbox" name="drilling machine[]" value="LDB" <?=in_array("LDB",$drilling_machine)?"checked":''?>></td>
+            <td colspan="2">DBS-J</td>
+            <td><input type="checkbox" name="drilling machine[]" value="DBS-J" <?=in_array("DBS-J",$drilling_machine)?"checked":''?>></td>
+        </tr>
+        <tr class="needCenter">
+            <td colspan="2">3000米以下</td>
+            <td><input type="checkbox" name="hole_depth[]" value="3000米以下" <?=in_array("3000米以下",$hole_depth)?"checked":''?>></td>
+            <td>4000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="4000米" <?=in_array("4000米",$hole_depth)?"checked":''?>></td>
+            <td>5000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="5000米" <?=in_array("5000米",$hole_depth)?"checked":''?>></td>
+            <td>7000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="7000米" <?=in_array("7000米",$hole_depth)?"checked":''?>></td>
+            <td colspan="2">8000米以上</td>
+            <td><input type="checkbox" name="hole_depth[]" value="8000米以上" <?=in_array("8000米以上",$hole_depth)?"checked":''?>></td>
+        </tr>
+        <tr>
+            <td colspan="12">{$sort+1}.具备以下哪些区块工作经验（可多选）</td>
+        </tr>
+        <tr class="needCenter">
+            <td>九龙山</td>
+            <td><input type="checkbox" name="section_experience[]" value="九龙山" <?=in_array("九龙山",$section_experience)?"checked":''?>></td>
+            <td>磨高</td>
+            <td><input type="checkbox" name="section_experience[]" value="磨高" <?=in_array("磨高",$section_experience)?"checked":''?>></td>
+            <td>莲花山</td>
+            <td><input type="checkbox" name="section_experience[]" value="莲花山" <?=in_array("莲花山",$section_experience)?"checked":''?>></td>
+            <td>威远</td>
+            <td><input type="checkbox" name="section_experience[]" value="威远" <?=in_array("威远",$section_experience)?"checked":''?>></td>
+            <td>龙岗</td>
+            <td><input type="checkbox" name="section_experience[]" value="龙岗" <?=in_array("龙岗",$section_experience)?"checked":''?>></td>
+            <td>长宁</td>
+            <td><input type="checkbox" name="section_experience[]" value="长宁" <?=in_array("长宁",$section_experience)?"checked":''?>></td>
+        </tr>
+        <tr class="needCenter">
+            <td>大兴场</td>
+            <td><input type="checkbox" name="section_experience[]" value="大兴场" <?=in_array("大兴场",$section_experience)?"checked":''?>></td>
+            <td>邛西</td>
+            <td><input type="checkbox" name="section_experience[]" value="邛西" <?=in_array("邛西",$section_experience)?"checked":''?>></td>
+            <td>双鱼石</td>
+            <td><input type="checkbox" name="section_experience[]" value="双鱼石" <?=in_array("双鱼石",$section_experience)?"checked":''?>></td>
+            <td>川渝外</td>
+            <td><input type="checkbox" name="section_experience[]" value="川渝外" <?=in_array("川渝外",$section_experience)?"checked":''?>></td>
+            <td>其他</td>
+            <td colspan="3"><input type="text" name="section_experience['else']" value="<?=array_key_exists('else',$section_experience)?$section_experience['else']:''?>"></td>
+        </tr>
+        <tr>
+            <td colspan="12">{$sort+2}.该员工的优秀项</td>
+        </tr>
+        <tr>
+            <td colspan="12">
+                <input type="text" name="excellent_items" value="<?=$result['excellent_items']?>">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">{$sort+3}.该员工的改进项及改进建议</td>
+        </tr>
+        <tr>
+            <td colspan="12"><input type="text" name="advice" value="<?=$result['advice']?>"></td>
+        </tr>
+        <tr>
+            <td colspan="12">{$sort+4}.会影响工作质量的其他情况（如身体状况、家庭情况）</td>
+        </tr>
+        <tr>
+            <td colspan="12"><input type="text" name="influence_situation" value="<?=$result['influence_situation']?>"></td>
+        </tr>
+        <tr class="needCenter">
+        <td colspan="3">评估小组（签字）</td>
+        <td>组长</td> <td colspan="2"><input type="text" name="headman_sign" value="<?=$result['headman_sign']?>">
+        </td>
+            <td>成员</td>
+            <td colspan="5"><input type="text" name="member_sign" value="<?=$result['member_sign']?>"></td>
+        </tr>
+    </table>
+    <div style="text-align: center">
+        <button style="width: 100px" type="submit">提交</button>
+    </div>
+
+</form>
+</body>
+<script type="text/javascript" src="/static/jQuery.js"></script>
+<script type="text/javascript">
+    //岗位具体名称
+    var station_detail_name = $('#station_id').text();
+    var station_detail = $('#station_detail');
+    var  station_array =[];
+    var nowStationName = "{$result.station_detail_name}";
+    console.log(nowStationName);
+    station_array['钻工'] = ['场地工','井架工','外钳工','内钳工','记录工'];
+    console.log(station_array['钻工'].length);
+    if(station_detail_name == "钻工"){
+        var start = '<select style="width: 100%" name="station_detail_name" id="">';
+        var end = '</select>';
+        var common = '';
+        for(var i = 0; i <station_array['钻工'].length;i++){
+
+            if(nowStationName == station_array['钻工'][i]){
+                var selected = "selected";
+                common = common+'<option value="'+station_array['钻工'][i]+'" '+selected+'>' +
+                    station_array["钻工"][i]+
+                    '</option>'
+            }else{
+                var selected = '';
+                common = common+'<option value="'+station_array['钻工'][i]+'" '+selected+'>' +
+                    station_array["钻工"][i]+
+                    '</option>'
+            }
+
+        }
+        console.log(common);
+        station_detail.html(start+common+end);
+    }else{
+        station_detail.html('<input name="station_detail_name" value="{$result.station_detail_name}" type="text">')
+    }
+    $('button').click(function () {
+        console.log(1);
+    });
+    $('#station').change(function () {
+        var stationId = this.options[this.options.selectedIndex].value;
+        var selectEle = document.getElementById('station');
+        var optArr = selectEle.getElementsByTagName('option')
+
+
+        for (var i = 0; i < optArr.length; i++) {
+            var optEle = optArr[i];
+            if (optEle.getAttribute('value') == stationId) {
+                optEle.selected = true;
+                console.log('现在是' + optEle.getAttribute('id'));
+            }
+        }
+
+        $('.before').remove();
+        $('tfoot').remove();
+        $.post("createTemplate", {station_id: stationId}, function (data) {
+            /*
+             评估问题部分
+             */
+            console.log(data);
+            if(typeof data !== 'object'){
+                console.log(typeof data);
+                return;
+            }
+            for (var i = 0; i < data.length; i++) {
+                /*console.log(i + 'a',typeof (i));*/
+                if (i == 0) {
+                    console.log("#sort_" + 1);
+                    $('<tr class="before" id="sort_'+ (i + 1) + '" >' +
+                        '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                        '<td>是</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                        '<td>部分</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                        '<td>否</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>').insertAfter($(".start"));
+                }
+                else if (i == (data.length - 1))
+                {
+                    console.log("#sort_"+(i + 1));
+                    $('<tr class="before" id="sort_'+(i+1)+'">' +
+                        '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                        '<td>是</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                        '<td>部分</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                        '<td>否</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>').insertAfter($("#sort_" + i));
+                }
+                else {
+                    if (i == 1) {
+                        console.log("#sort_" + (i + 1));
+                        $("#sort_1").after('<tr class="before" id="sort_' + (i + 1) + '">' +
+                            '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                            '<td>是</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                            '<td>部分</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                            '<td>否</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>');
+                    }
+                    else {
+                        console.log("#sort_" + (i + 1));
+                        $("#sort_" + i).after('<tr class="before" id="sort_' + (i + 1) + '">' +
+                            '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                            '<td>是</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                            '<td>部分</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                            '<td>否</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>');
+                    }
+                }
+            }
+
+        })
+    })
+</script>
+</html>

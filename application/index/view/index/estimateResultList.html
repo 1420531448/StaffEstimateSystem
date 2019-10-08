@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+            width: 600px;
+            text-align: center;
+        }
+        td {
+            border: 1px solid black;
+        }
+        button{
+            width: 200px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+{include file="common/banner"}
+<a href="/index/index/index"><button>首页</button></a>
+<table>
+    <tr class="tableHead">
+        <td>编号</td>
+        <td>单位</td>
+        <td>岗位(大方向)</td>
+        <td>岗位名称</td>
+        <td>评估日期</td>
+        <td>被评估人员名称</td>
+        <td>是否生成方案</td>
+        <td>操作</td>
+    </tr>
+    {volist name="result" id="res" empty="暂无数据"}
+    <tr>
+        <td>{$res.result_id}</td>
+        <td>{$res.unit}</td>
+        <td>{$res.station_name}</td>
+        <td>{$res.station_detail_name}</td>
+        <td>{$res.estimate_date}</td>
+        <td>{$res.estimate_name}</td>
+        <td class="{$res.result_id}" >{$res.is_check==0?'否':''}{$res.is_check==1?'是':''}{$res.is_check==2?'无需':''}</td>
+        <td><a href="/index/index/editEstimateResult?result_id={$res.result_id}">修改</a>/<a id="{$res.result_id}" class="confirm" href="">评估问题生成</a></td>
+        {/volist}
+    </tr>
+</table>
+</body>
+<script type="text/javascript" src="/static/jQuery.js"></script>
+<script type="text/javascript">
+    $(".confirm").click(function () {
+
+        var id = $(this).attr('id');
+        var ok = true;
+        var success = confirm("是否确认员工评估结果,根据问题生成相应处理方式?");
+
+        if(success){
+            $.ajax({
+                type:'get',
+                url:'screenEstimateProblem',
+                data:'result_id='+id,
+                success : function(data){
+                   if(data===false){
+                       alert('该员工不需要进行培训等操作');
+                       return;
+                   }else {
+                       window.location='screenEstimateProblem?result_id='+id;
+                       return
+                       ;
+                   }
+                }
+            })
+
+
+        }
+    });
+</script>
+
+</html>

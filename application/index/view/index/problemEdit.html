@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位评估问题修改</title>
+    <style>
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<form action="editProblemDetail" method="post">
+    <table>
+        <tr>
+            <td>问题详情:</td>
+            <td><input type="text" name="description" value="<?=$detail['description']?>" ></td>
+            <input hidden type="text" name="problem_id" value="<?=$detail['problem_id']?>">
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="text-align: center" >
+                    <button type="submit" style="width: 100%">提交</button>
+                </div>
+            </td>
+        </tr>
+
+
+    </table>
+
+</form>
+</body>
+</html>

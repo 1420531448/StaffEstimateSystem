@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位评估问题添加</title>
+    <style>
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        td{
+            border:1px solid black;
+        }
+        button{
+            width: 200px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+{include file="common/banner"}
+<a href="/index/index/index"><button>首页</button></a>
+<a href="/index/index/stationList"><button>岗位列表</button></a>
+<table>
+    <tr><td>岗位</td><td colspan="2"><?=$station_name['station_name']?></td></tr>
+    <tr>
+        <td>编号</td>
+        <td>问题</td>
+        <td>操作</td>
+    </tr>
+
+    {volist name="problem" id="p" empty=""}
+    <tr>
+        <td>{$p.problem_id}</td>
+        <td>{$p.description}</td>
+        <td><a href="/index/index/editProblemDetail?problem_id=<?=$p['problem_id']?>">修改</a>/<a href="/index/index/deleteProblemDetail?problem_id=<?=$p['problem_id']?>">删除</a></td>
+    </tr>
+    {/volist}
+
+    <tr>
+        <td colspan="3"><div><a href="/index/index/problemAdd?station_id=<?=$station_id?>"><button type="submit" style="width: 100%">新增</button></a></div></td>
+    </tr>
+</table>
+</body>
+</html>

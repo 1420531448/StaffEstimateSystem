@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位评估问题添加</title>
+    <style>
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+        input[type=text]{
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+{include file="common/banner"}
+<form action="problemAdd" method="post">
+    <table>
+        <tr>
+            <td>评估问题:</td>
+            <td><input type="text" name="description"></td>
+            <input type="text" hidden name="station_id" value="<?=$_GET['station_id']?>">
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="text-align: center" >
+                    <button type="submit" style="width: 100%">提交</button>
+                </div>
+            </td>
+        </tr>
+
+
+    </table>
+
+</form>
+</body>
+
+</html>

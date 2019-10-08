@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>岗位列表</title>
+    <style>
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+            width: 600px;
+            text-align: center;
+        }
+        td {
+            border: 1px solid black;
+        }
+        button{
+            width: 200px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+{include file="common/banner"}
+<a href="/index/index/index"><button>首页</button></a>
+<table>
+    <tr class="tableHead">
+        <td>编号</td>
+        <td>岗位</td>
+        <td>操作</td>
+    </tr>
+    <?php foreach($all as $a){?>
+    <tr>
+        <td><?=$a['station_id']?></td>
+        <td><a href="/index/index/problemDetail?station_id=<?=$a['station_id']?>"><?=$a['station_name']?></a></td>
+        <td><a href="/index/index/stationDelete?station_id=<?=$a['station_id']?>">删除</a></td>
+    </tr>
+    <?php }?>
+    <tr>
+        <td colspan="3"><div><a href="/index/index/stationAdd"><button type="submit" style="width: 100%">新增</button></a></div></td>
+    </tr>
+</table>
+</body>
+</html>

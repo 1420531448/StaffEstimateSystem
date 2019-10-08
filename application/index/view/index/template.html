@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工能力评估系统</title>
+    <style type="text/css">
+        .banner {
+            background-color: gray;
+        }
+
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
+        input[type="text"] {
+            border: none;
+            width: 100%;
+        }
+
+        input[type="number"] {
+            border: none;
+            width: 100%;
+        }
+
+        input[type="date"] {
+            border: none;
+            width: 100%;
+        }
+
+        .a2b5 {
+            color: red;
+        }
+
+        .needCenter > td {
+            text-align: center;
+        }
+
+        .station {
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body><!--<?='__STATIC__/image/logo.png'?>-->
+<div class="banner"><img src="/static/image/logo.png" alt=""/></div>
+<form action="getEstimateResult" method="post">
+<div style="text-align: center">
+    钻井队 <select name="station_id" id="station">
+    <option id="0">请选择</option>
+    {volist name="station" id="s" empty="暂时没有数据"}
+    <option id="{$s.station_id}" name="option{$s.station_id}" value="{$s.station_id}">{$s.station_name}</option>
+    {/volist}
+</select> 履职能力评估表
+</div>
+    <table>
+        <tr class="needCenter">
+            <td class="a1" colspan="3">
+                被评估人单位
+            </td>
+            <td class="a2" colspan="3">
+                <input type="text" name="unit">
+            </td>
+            <td colspan="3">
+                评估日期
+            </td>
+            <td colspan="3">
+                <input type="date" name="estimate_date">
+            </td>
+        </tr>
+        <tr class="needCenter">
+            <td>
+                被评估人
+            </td>
+            <td>
+                <input type="text" name="estimate_name">
+            </td>
+            <td colspan="2">
+                岗位
+            </td>
+            <td id="station_detail">
+
+            </td>
+            <td colspan="8">
+                <label><input type="checkbox" name="type[]" value="1"><span class="a2b5">新组队</span></label>
+                <label><input type="checkbox" name="type[]" value="2"><span class="a2b5">新调入</span></label>
+                <label><input type="checkbox" name="type[]" value="4"><span class="a2b5">新探区</span></label>
+                <label><input type="checkbox" name="type[]" value="8"><span class="a2b5">重点井</span></label>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center" colspan="12">
+                工作经历评估项目
+            </td>
+        </tr>
+        <tr>
+            <td>
+                本岗位工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" min="0.0" step="0.1" name="station_working_years">
+            </td>
+            <td>
+                本区块工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" min="0.0" step="0.1" name="section_working_years">
+            </td>
+            <td>
+                本机型工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" min="0.0" step="0.1" name="type_of_mechine_years">
+            </td>
+            <td>
+                顶驱工作年限
+            </td>
+            <td colspan="2">
+                <input type="number" min="0.0" step="0.1" name="top_drive_working_years">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12" style="text-align: center">评估要求</td>
+        </tr>
+        <tr>
+            <td colspan="12">根据表格所列举问题，在空白处打钩。其中 <span id="number"></span>项为必填项</td>
+        </tr>
+        <tr class="start">
+            <td style="text-align: center" colspan="12">评估内容</td>
+        </tr>
+        <!--主题问题遍历-->
+        <!--<tr>
+            <td colspan="6">1.是否清楚新《安全法》从业人员的权利和义务</td>
+            <td>是</td>
+            <td><input type="radio" name="select1" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select1" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select1" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">2.是否清楚本井的安全环保风险和应对措施</td>
+            <td>是</td>
+            <td><input type="radio" name="select2" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select2" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select2" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">3.是否清楚本井的工程质量管控、技术措施</td>
+            <td>是</td>
+            <td><input type="radio" name="select3" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select3" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select3" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">4.是否清楚本井的单井项目管理方案，是否有具体措施</td>
+            <td>是</td>
+            <td><input type="radio" name="select4" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select4" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select4" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">5.是否清楚该区块相邻井位的钻井参数和技术措施(1字号井考核是否制定施工方案、技术措施)</td>
+            <td>是</td>
+            <td><input type="radio" name="select5" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select5" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select5" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">6.是否清楚本岗位管理设备的技术状况</td>
+            <td>是</td>
+            <td><input type="radio" name="select6" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select6" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select6" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">7.是否清楚公司近期发生的工程事故及复杂，是否总结教训，对本井是否有针对性思考</td>
+            <td>是</td>
+            <td><input type="radio" name="select7" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select7" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select7" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">8.是否清楚井控突发事件及硫化氢泄漏突发事件的预防措施及应急处置程序</td>
+            <td>是</td>
+            <td><input type="radio" name="select8" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select8" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select8" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">9.同班子其他成员的配合、沟通、交流能力</td>
+            <td>好</td>
+            <td><input type="radio" name="select9" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select9" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select9" value="3"></td>
+        </tr>
+        <tr>
+            <td colspan="6">10.对井下故障、复杂的判断、分析及处置能力</td>
+            <td>好</td>
+            <td><input type="radio" name="select10" value="1"></td>
+            <td>部分</td>
+            <td><input type="radio" name="select10" value="2"></td>
+            <td>否</td>
+            <td><input type="radio" name="select10" value="3"></td>
+        </tr>-->
+        <!--<tr>
+            <td>
+
+            </td>
+        </tr>-->
+        <!---->
+        <!--<tr>
+            <td colspan="12">11.具备以下哪些钻机工作经验（可多选）</td>
+        </tr>
+        <tr class="needCenter">
+            <td colspan="2">电动</td>
+            <td><input type="checkbox" name="drilling machine[]" value="1"></td>
+            <td>机械</td>
+            <td><input type="checkbox" name="drilling machine[]" value="2"></td>
+            <td>ZPD</td>
+            <td><input type="checkbox" name="drilling machine[]" value="3"></td>
+            <td>LDB</td>
+            <td><input type="checkbox" name="drilling machine[]" value="4"></td>
+            <td colspan="2">DBS-J</td>
+            <td><input type="checkbox" name="drilling machine[]" value="5"></td>
+        </tr>
+        <tr class="needCenter">
+            <td colspan="2">3000米以下</td>
+            <td><input type="checkbox" name="hole_depth[]" value="1"></td>
+            <td>4000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="2"></td>
+            <td>5000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="3"></td>
+            <td>7000米</td>
+            <td><input type="checkbox" name="hole_depth[]" value="4"></td>
+            <td colspan="2">8000米以上</td>
+            <td><input type="checkbox" name="hole_depth[]" value="5"></td>
+        </tr>
+        <tr>
+            <td colspan="12">12.具备以下哪些区块工作经验（可多选）</td>
+        </tr>
+        <tr class="needCenter">
+            <td>九龙山</td>
+            <td><input type="checkbox" name="section[]" value="1"></td>
+            <td>磨高</td>
+            <td><input type="checkbox" name="section[]" value="2"></td>
+            <td>莲花山</td>
+            <td><input type="checkbox" name="section[]" value="3"></td>
+            <td>威远</td>
+            <td><input type="checkbox" name="section[]" value="4"></td>
+            <td>龙岗</td>
+            <td><input type="checkbox" name="section[]" value="5"></td>
+            <td>长宁</td>
+            <td><input type="checkbox" name="section[]" value="6"></td>
+        </tr>
+        <tr class="needCenter">
+            <td>大兴场</td>
+            <td><input type="checkbox" name="section[]" value="7"></td>
+            <td>邛西</td>
+            <td><input type="checkbox" name="section[]" value="8"></td>
+            <td>双鱼石</td>
+            <td><input type="checkbox" name="section[]" value="9"></td>
+            <td>川渝外</td>
+            <td><input type="checkbox" name="section[]" value="10"></td>
+            <td>其他</td>
+            <td colspan="3"><input type="text" name="section['else']" value=""></td>
+        </tr>
+        <tr>
+            <td colspan="12">13.该员工的优秀项</td>
+        </tr>
+        <tr>
+            <td colspan="12">
+                <input type="text" name="excellent_items">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">14.该员工的改进项及改进建议</td>
+        </tr>
+        <tr>
+            <td colspan="12"><input type="text" name="advice"></td>
+        </tr>
+        <tr>
+            <td colspan="12">15.会影响工作质量的其他情况（如身体状况、家庭情况）</td>
+        </tr>
+        <tr>
+            <td colspan="12"><input type="text" name="influence_situation"></td>
+        </tr>-->
+    </table>
+    <div style="text-align: center">
+        <button style="width: 100px" type="submit">提交</button>
+    </div>
+
+</form>
+</body>
+<script type="text/javascript" src="/static/jQuery.js"></script>
+<script type="text/javascript">
+    $('button').click(function () {
+        console.log(1);
+    });
+    $('#station').change(function () {
+        var stationId = this.options[this.options.selectedIndex].value;
+        var selectEle = document.getElementById('station');
+
+        //岗位具体名称
+        var station_detail_name = $('#'+stationId).text();
+        var station_detail = $('#station_detail');
+        var  station_array =[];
+        station_array['钻工'] = ['场地工','井架工','外钳工','内钳工','记录工'];
+        console.log(station_array['钻工'].length);
+        if(station_detail_name == "钻工"){
+            var start = '<select style="width: 100%" name="station_detail_name" id="">';
+            var end = '</select>';
+            var common = '';
+            for(var i = 0; i <station_array['钻工'].length;i++){
+                common = common+'<option value="'+station_array['钻工'][i]+'">' +
+                    station_array["钻工"][i]+
+                '</option>'
+            }
+            station_detail.html(start+common+end);
+        }else{
+            station_detail.html('<input name="station_detail_name" type="text">')
+        }
+
+
+        $('.before').remove();
+        $('tfoot').remove();
+        $.post("createTemplate", {station_id: stationId}, function (data) {
+            /*
+             评估问题部分
+             */
+            console.log(data);
+            if(typeof data !== 'object'){
+                console.log(typeof data);
+                return;
+            }
+            for (var i = 0; i < data.length; i++) {
+                /*console.log(i + 'a',typeof (i));*/
+                if (i == 0) {
+                    console.log("#sort_" + 1);
+                    $('<tr class="before" id="sort_'+ (i + 1) + '" >' +
+                        '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                        '<td>是</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                        '<td>部分</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                        '<td>否</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>').insertAfter($(".start"));
+                }
+                else if (i == (data.length - 1))
+                {
+                    console.log("#sort_"+(i + 1));
+                    $('<tr class="before" id="sort_'+(i+1)+'">' +
+                        '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                        '<td>是</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                        '<td>部分</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                        '<td>否</td>' +
+                        '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>').insertAfter($("#sort_" + i));
+                }
+                else {
+                    if (i == 1) {
+                        console.log("#sort_" + (i + 1));
+                        $("#sort_1").after('<tr class="before" id="sort_' + (i + 1) + '">' +
+                            '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                            '<td>是</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                            '<td>部分</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                            '<td>否</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>');
+                    }
+                    else {
+                        console.log("#sort_" + (i + 1));
+                        $("#sort_" + i).after('<tr class="before" id="sort_' + (i + 1) + '">' +
+                            '<td colspan="6">' + (i + 1) + '.' + data[i]['description'] +
+                            '<td>是</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="1"></td>' +
+                            '<td>部分</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="2"></td>' +
+                            '<td>否</td>' +
+                            '<td><input type="radio" name="problem_id'+data[i]['problem_id']+'" value="3"></td></tr>');
+                    }
+                }
+            }
+            /**
+             *序号重排
+             */
+            $('<tfoot><tr><td colspan="12">'+(data.length+1)+'.具备以下哪些钻机工作经验（可多选）</td></tr>' +
+             '<tr class="needCenter">' +
+             '<td colspan="3"><input type="checkbox" name="drilling machine[]" value="电动" id="drilling1"><label for="drilling1">电动</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="drilling machine[]" value="机械" id="drilling2"><label for="drilling2">机械</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="drilling machine[]" value="ZPD" id="drilling3"><label for="drilling3">ZPD</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="drilling machine[]" value="LDB" id="drilling4"><label for="drilling4">LDB</label></td>' +
+                '<td colspan="3"><input type="checkbox" name="drilling machine[]" value="DBS-J" id="drilling5"><label for="drilling5">DBS-J</label></td>'+
+                '</tr>' +
+             '<tr class="needCenter">' +
+             '<td colspan="3"><input type="checkbox" name="hole_depth[]" value="3000米以下" id="hole_depth1"><label for="hole_depth1">3000米以下</label></td> ' +
+             '<td colspan="2"><input type="checkbox" name="hole_depth[]" value="4000米" id="hole_depth2"><label for="hole_depth2">4000米</label></td> ' +
+             '<td colspan="2"><input type="checkbox" name="hole_depth[]" value="5000米" id="hole_depth3"><label for="hole_depth3">5000米</label></td> ' +
+             '<td colspan="2"><input type="checkbox" name="hole_depth[]" value="7000米" id="hole_depth4"><label for="hole_depth4">7000米</label></td>' +
+             '<td colspan="3"><input type="checkbox" name="hole_depth[]" value="8000米以上" id="hole_depth5"><label for="hole_depth5">8000米以上</label></td>' +
+             '</tr>' +
+             '<tr>' +
+             '<td colspan="12">'+(data.length+2)+'.具备以下哪些区块工作经验（可多选）</td>' +
+             '</tr> ' +
+             '<tr class="needCenter"> ' +
+             '<td colspan="2"><input type="checkbox" name="section_experience[]" value="九龙山" id="section1"><label for="section1">九龙山</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="磨高" id="section2"><label for="section2">磨高</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="莲花山" id="section3"><label for="section3">莲花山</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="威远" id="section4"><label for="section4">威远</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="龙岗" id="section5"><label for="section5">龙岗</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="长宁" id="section6"><label for="section6">长宁</label></td>' +
+             '</tr> ' +
+             '<tr class="needCenter"> ' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="大兴场" id="section7"><label for="section7">大兴场</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="邛西" id="section8"><label for="section8">邛西</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="双鱼石" id="section9"><label for="section9">双鱼石</label></td>' +
+                '<td colspan="2"><input type="checkbox" name="section_experience[]" value="川渝外" id="section10"><label for="section10">川渝外</label></td>' +
+             '<td colspan="2">其他</td> ' +
+             '<td colspan="2"><input type="text" name="section_experience[other]" value=""></td>' +
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12">'+(data.length+3)+'.该员工的优秀项</td>' +
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12"><input type="text" name="excellent_items"></td> ' +
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12">'+(data.length+4)+'.该员工的改进项及改进建议</td> ' +
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12"><input type="text" name="advice"></td> '+
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12">'+(data.length+5)+'.会影响工作质量的其他情况（如身体状况、家庭情况）</td> ' +
+             '</tr> ' +
+             '<tr> ' +
+             '<td colspan="12"><input type="text" name="influence_situation"></td>' +
+             '</tr>'+
+                '<tr class="needCenter"> ' +
+                '<td colspan="3">评估小组（签字）</td>' +
+                '<td>组长</td> <td colspan="2">' +
+                '<input type="text" name="headman_sign">' +
+                '</td> ' +
+                '<td>成员</td> ' +
+                '<td colspan="5"><input type="text" name="member_sign"></td> </tr></tfoot>').insertAfter($('tbody'));/*$("#sort_"+(data.length))*/
+            console.log(data.length+1);
+            $('#number').html((data.length+4)+"、"+(data.length+5));
+        })
+    })
+</script>
+</html>

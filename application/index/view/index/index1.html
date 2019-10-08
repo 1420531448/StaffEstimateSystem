@@ -1,0 +1,315 @@
+<?php
+ob_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>员工能力评估系统</title>
+    <style type="text/css">
+        .banner{
+            background-color: gray;
+        }
+        table {
+            border: 1px;
+            border-color: black;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        td{
+            border:1px solid black;
+        }
+        input[type="text"]{
+            border: none;
+            width: 100%;
+        }
+        input[type="number"]{
+            border: none;
+            width: 100%;
+        }
+        input[type="date"]{
+            border: none;
+            width: 100%;
+        }
+        .a2b5{
+            color: red;
+        }
+        .needCenter>td{
+            text-align: center;
+        }
+        .station{
+            border: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="banner" ><img src="<?='__STATIC__/image/logo.png'?>" alt=""/></div>
+<div style="text-align: center">
+    钻井队钻井技术负责人履职能力评估表
+</div>
+<form action="getEsitmateResult" method="post" >
+<table>
+    <tr class="needCenter">
+        <td class="a1" colspan="3">
+            被评估人单位
+        </td>
+        <td class="a2" colspan="3">
+            <input type="text" name="unit">
+        </td>
+        <td colspan="3">
+            评估日期
+        </td>
+        <td colspan="3">
+            <input type="date" name="estimate_date">
+        </td>
+    </tr>
+    <tr class="needCenter">
+        <td>
+            被评估人
+        </td>
+        <td>
+            <input type="text" name="estimate_name">
+        </td>
+        <td>
+            岗位
+        </td>
+        <td>
+            <input type="text" name="station">
+        </td>
+        <td colspan="8">
+            <span class="a2b5">新组队</span><input type="checkbox" name="type[]" value="1">
+            <span class="a2b5">新调入</span><input type="checkbox" name="type[]" value="2">
+            <span class="a2b5">新探区</span><input type="checkbox" name="type[]" value="3">
+            <span class="a2b5">重点井</span><input type="checkbox" name="type[]" value="4">
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center" colspan="12">
+            工作经历评估项目
+        </td>
+    </tr>
+    <tr>
+        <td>
+            本岗位工作年限
+        </td>
+        <td colspan="2">
+            <input type="number" name="working_years">
+        </td>
+        <td>
+            本区块工作年限
+        </td>
+        <td colspan="2">
+            <input type="number" name="local_working_years">
+        </td>
+        <td>
+            本机型工作年限
+        </td>
+        <td colspan="2">
+            <input type="number" name="type_of_mechine_years">
+        </td>
+        <td>
+            顶驱工作年限
+        </td>
+        <td colspan="2">
+            <input type="number" name="top_drive_working_years">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="12" style="text-align: center">评估要求</td>
+    </tr>
+    <tr>
+        <td colspan="12">根据表格所列举问题，在空白处打钩。其中14、15项为必填项</td>
+    </tr>
+    <tr>
+        <td style="text-align: center" colspan="12">评估内容</td>
+    </tr>
+    <!--问题1-->
+    <tr>
+        <td colspan="6">1.是否清楚新《安全法》从业人员的权利和义务</td>
+        <td>是</td>
+        <td><input type="radio" name="select1" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select1" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select1" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">2.是否清楚本井的安全环保风险和应对措施</td>
+        <td>是</td>
+        <td><input type="radio" name="select2" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select2" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select2" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">3.是否清楚本井的工程质量管控、技术措施</td>
+        <td>是</td>
+        <td><input type="radio" name="select3" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select3" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select3" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">4.是否清楚本井的单井项目管理方案，是否有具体措施</td>
+        <td>是</td>
+        <td><input type="radio" name="select4" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select4" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select4" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">5.是否清楚该区块相邻井位的钻井参数和技术措施(1字号井考核是否制定施工方案、技术措施)</td>
+        <td>是</td>
+        <td><input type="radio" name="select5" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select5" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select5" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">6.是否清楚本岗位管理设备的技术状况</td>
+        <td>是</td>
+        <td><input type="radio" name="select6" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select6" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select6" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">7.是否清楚公司近期发生的工程事故及复杂，是否总结教训，对本井是否有针对性思考</td>
+        <td>是</td>
+        <td><input type="radio" name="select7" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select7" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select7" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">8.是否清楚井控突发事件及硫化氢泄漏突发事件的预防措施及应急处置程序</td>
+        <td>是</td>
+        <td><input type="radio" name="select8" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select8" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select8" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">9.同班子其他成员的配合、沟通、交流能力</td>
+        <td>好</td>
+        <td><input type="radio" name="select9" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select9" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select9" value="3"></td>
+    </tr>
+    <tr>
+        <td colspan="6">10.对井下故障、复杂的判断、分析及处置能力</td>
+        <td>好</td>
+        <td><input type="radio" name="select10" value="1"></td>
+        <td>部分</td>
+        <td><input type="radio" name="select10" value="2"></td>
+        <td>否</td>
+        <td><input type="radio" name="select10" value="3"></td>
+    </tr>
+    <!--问题10-->
+    <tr>
+        <td colspan="12">11.具备以下哪些钻机工作经验（可多选）</td>
+    </tr>
+    <tr class="needCenter">
+        <td colspan="2">电动</td>
+        <td><input type="checkbox" name="drilling machine[]" value="1"></td>
+        <td>机械</td>
+        <td><input type="checkbox" name="drilling machine[]" value="2"></td>
+        <td>ZPD</td>
+        <td><input type="checkbox" name="drilling machine[]" value="3"></td>
+        <td>LDB</td>
+        <td><input type="checkbox" name="drilling machine[]" value="4"></td>
+        <td colspan="2">DBS-J</td>
+        <td><input type="checkbox" name="drilling machine[]" value="5"></td>
+    </tr>
+    <tr class="needCenter">
+        <td colspan="2">3000米以下</td>
+        <td><input type="checkbox" name="hole_depth[]" value="1"></td>
+        <td>4000米</td>
+        <td><input type="checkbox" name="hole_depth[]" value="2"></td>
+        <td>5000米</td>
+        <td><input type="checkbox" name="hole_depth[]" value="3"></td>
+        <td>7000米</td>
+        <td><input type="checkbox" name="hole_depth[]" value="4"></td>
+        <td colspan="2">8000米以上</td>
+        <td><input type="checkbox" name="hole_depth[]" value="5"></td>
+    </tr>
+    <tr>
+        <td colspan="12">12.具备以下哪些区块工作经验（可多选）</td>
+    </tr>
+    <tr class="needCenter">
+        <td>九龙山</td>
+        <td><input type="checkbox" name="section[]" value="1"></td>
+        <td>磨高</td>
+        <td><input type="checkbox" name="section[]" value="2"></td>
+        <td>莲花山</td>
+        <td><input type="checkbox" name="section[]" value="3"></td>
+        <td>威远</td>
+        <td><input type="checkbox" name="section[]" value="4"></td>
+        <td>龙岗</td>
+        <td><input type="checkbox" name="section[]" value="5"></td>
+        <td>长宁</td>
+        <td><input type="checkbox" name="section[]" value="6"></td>
+    </tr>
+    <tr class="needCenter">
+        <td>大兴场</td>
+        <td><input type="checkbox" name="section[]" value="7"></td>
+        <td>邛西</td>
+        <td><input type="checkbox" name="section[]" value="8"></td>
+        <td>双鱼石</td>
+        <td><input type="checkbox" name="section[]" value="9"></td>
+        <td>川渝外</td>
+        <td><input type="checkbox" name="section[]" value="10"></td>
+        <td>其他</td>
+        <td colspan="3"><input type="text" name="section['else']" value=""></td>
+    </tr>
+    <tr>
+        <td colspan="12">13.该员工的优秀项</td>
+    </tr>
+    <tr>
+        <td colspan="12">
+            <input type="text" name="excellent_items">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="12">14.该员工的改进项及改进建议</td>
+    </tr>
+    <tr>
+        <td colspan="12"><input type="text" name="advice"></td>
+    </tr>
+    <tr>
+        <td colspan="12">15.会影响工作质量的其他情况（如身体状况、家庭情况）</td>
+    </tr>
+    <tr>
+        <td colspan="12"><input type="text" name="influence_situation"></td>
+    </tr>
+    <tr class="needCenter">
+        <td colspan="3">评估小组（签字）</td>
+        <td>组长</td>
+        <td colspan="2"><input type="text" name="headman_sign"></td>
+        <td>成员</td>
+        <td colspan="5"><input type="text" name="member_sign"></td>
+    </tr>
+</table>
+<div style="text-align: center">
+    <button type="submit">提交</button>
+</div>
+</form>
+</body>
+</html>
+<?php
+$cacheStr=ob_get_contents();
+file_put_contents(APP_PATH.'/index/view/index/1.html',$cacheStr);
+$handle=fopen("index2.html","w","../application/index/view/index/");
+fwrite($handle, $cacheStr);
+ob_clean();
+?>
